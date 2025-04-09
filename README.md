@@ -12,7 +12,7 @@ Il s’agit ici de reproduire le comportement d’Hadoop sur l’exemple de comp
 
 **Deux approches possibles** (on peut faire des deux d'affilée dans l'idéal, ou juste une)
 
-- Multithread en java
+- Multithread en java (`./multithread`)
 - Avec plusieurs processus en java (ou python, ou c) avec des communications par sockets ou RMI ou systèmes de fichiers
     - **ça marche à peu près comme ça :**
     - en gros, la machine "utilisateur" prend un gros fichier et le découpe en n plus petits fichiers (n défini à l'avance)
