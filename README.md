@@ -18,8 +18,8 @@ Il s’agit ici de reproduire le comportement d’Hadoop sur l’exemple de comp
     - en gros, la machine "utilisateur" prend un gros fichier et le découpe en n plus petits fichiers (n défini à l'avance)
     - il y a n mappers qui tournent sur d'autres machines (ou localhost) et écoutent les sockets du processus de l'utilisateur
     - l'utilisateur envoie à chaque mapper son bout de fichier et ils font leurs tâches
-    - _quand ils ont fini, ils envoient au processus utilisateur le nombre de leurs données qui seront assignées à chaque reducer (par exemple si on a 2 reducers, un qui prend tous les mots qui commencent par `<m` et l'autre par tous les mots qui commencent par `>m`, les mappers vont compter ça et l'utilisateur enverra donc la tâche vers un reducer sur la machine qui aura le plus à faire (genre si 70% des mots comptés par map1 vont vers le red2, on va dire que red2 est le reducer de la meme machine que map1 t'as capté))_∗ ∗∗
-    - _l'utilisateur en déduit sur quel reducer ils doivent envoyer leurs données (pour minimiser les échanges entre machines)_∗
+    - _quand ils ont fini, ils envoient au processus utilisateur le nombre de leurs données qui seront assignées à chaque reducer (par exemple si on a 2 reducers, un qui prend tous les mots qui commencent par `<m` et l'autre par tous les mots qui commencent par `>m`, les mappers vont compter ça et l'utilisateur enverra donc la tâche vers un reducer sur la machine qui aura le plus à faire (genre si 70% des mots comptés par map1 vont vers le red2, on va dire que red2 est le reducer de la meme machine que map1 t'as capté))_ ∗ ∗∗
+    - _l'utilisateur en déduit sur quel reducer ils doivent envoyer leurs données (pour minimiser les échanges entre machines)_ ∗
     - les reducers font leur job
     - les reducers envoient le résultat à l'utilisateur
 
