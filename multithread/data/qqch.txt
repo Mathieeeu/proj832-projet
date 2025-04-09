@@ -1,0 +1,6 @@
+MapReduce permet de manipuler de grandes quantités de données en les distribuant dans un cluster de machines pour être traitées. 
+Ce modèle connaît un vif succès auprès de sociétés possédant d'importants centres de traitement de données telles Amazon.com ou Facebook. 
+Il commence aussi à être utilisé au sein du Cloud computing. De nombreux frameworks ont vu le jour afin d'implémenter le MapReduce. 
+Le plus connu est Hadoop qui a été développé par Apache Software Foundation. 
+Mais ce framework possède des inconvénients qui réduisent considérablement ses performances notamment en milieu hétérogène. 
+Des frameworks permettant d'améliorer les performances de Hadoop ou les performances globales du MapReduce, tant en matière de vitesse de traitement qu'en consommation électrique, commencent à voir le jour.
