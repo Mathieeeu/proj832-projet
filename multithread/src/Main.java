@@ -9,8 +9,8 @@ public class Main {
         long startTime = System.currentTimeMillis();
         
         // I/O
-        String inputFileName = "./multithread/data/bible.txt";
-        String outputDirBase = "./multithread/output/";
+        String inputFileName = "./data/bible.txt";
+        String outputDirBase = "./output/";
         String outputDir = outputDirBase + FileManager.getFileName(inputFileName) + "_mapreduce/";
         String finalOutputFileName = outputDirBase + "wordcount_" + FileManager.getFileName(inputFileName) + ".txt";
         FileManager.deleteDirectory(outputDir);

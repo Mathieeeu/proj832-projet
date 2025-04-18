@@ -1,5 +1,5 @@
 *.class
-multithread/output/*
-multithread/data/*
-!multithread/data/qqch.txt
+**/output/*
+**/data/*
+!**/data/qqch.txt
 /.vscode
