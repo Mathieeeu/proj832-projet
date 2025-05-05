@@ -18,7 +18,7 @@ public class App {
         FileManager.deleteDirectory("./output/");
         FileManager.createDirectory("./output/");
         FileManager.createDirectory("./output/mapping/");
-        FileManager.createDirectory("./output/reduce/");
+        FileManager.createDirectory("./output/reducing/");
 
         switch (appType.toLowerCase()) {
             case "client" -> {
@@ -34,7 +34,7 @@ public class App {
 
                 reducers.put(0, new InetSocketAddress("localhost", 5020));
                 reducers.put(1, new InetSocketAddress("localhost", 5021));
-                reducers.put(2, new InetSocketAddress("localhost", 5022));
+                // reducers.put(2, new InetSocketAddress("localhost", 5022));
 
                 Client client = new Client(5001, mappers, reducers, "./data/qqch.txt");
                 

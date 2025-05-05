@@ -31,6 +31,16 @@ public class FileManager {
         return filePath.substring(filePath.lastIndexOf(".") + 1);
     }
 
+    public static int getNbLines(String filePath) throws IOException {
+        int nbLines = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            while ((br.readLine()) != null) {
+                nbLines++;
+            }
+        }
+        return nbLines;
+    }
+
     public static void createDirectory(String dirPath) {
         java.io.File dir = new java.io.File(dirPath);
         if (!dir.exists()) {

@@ -18,11 +18,10 @@ public class Mapper{
         for (int i = 0; i < nbReducers; i++) {
             String outputFileName = outputDir + "mapper_" + idMapper + "_reducer_" + i + ".txt";
             
-            
             try (FileWriter writer = new FileWriter(outputFileName)) {
                 Map<String, Integer> wordCount = new HashMap<>();
                 for (String line : input) {
-                    String[] words = line.split("\\s+"); // Séparation des mots s'il y a 1+ espaces
+                    String[] words = line.split("\\s+");
                     
                     for (String word : words) {
                         if (isItMyJob(word, nbReducers, i)) {
