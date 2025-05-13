@@ -25,14 +25,17 @@ def cleanup_class_files():
                 os.remove(os.path.join(root, file))
     # print("Fichiers .class supprimés.")
 
-def launch_app(app_type, port=None, server_type=None):
+def launch_app(app_type, inputFile=None, port=None, server_type=None):
     # Construire la commande Java en utilisant le répertoire de sortie comme classpath
     output_dir = "src/classes"
     command = ["java", "-cp", output_dir, "App"]
 
     # Ajouter les arguments en fonction du type
     if app_type == "client":
-        command.append("client")
+        if inputFile is None:
+            print("Pour le type 'client', le fichier d'entrée est obligatoire.")
+            return
+        command.extend(["client", inputFile])
     elif app_type == "server":
         if port is None or server_type is None:
             print("Pour le type 'server', le port et le type de serveur sont obligatoires.")
@@ -61,7 +64,8 @@ if __name__ == "__main__":
                 port = sys.argv[2]
                 server_type = sys.argv[3]
                 compile_java()
-                launch_app(app_type, port, server_type)
+                launch_app(app_type, port=port, server_type=server_type)
         else:
+            inputFile = sys.argv[2]
             compile_java()
-            launch_app(app_type)
+            launch_app(app_type, inputFile=inputFile)

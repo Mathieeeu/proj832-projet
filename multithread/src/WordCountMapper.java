@@ -18,7 +18,7 @@ public class WordCountMapper implements Mapper {
 
             try (FileWriter writer = new FileWriter(outputFileName)) {
                 for (String line : input) {
-                    String[] words = line.split("\\s+"); // Séparation des mots s'il y a 1+ espaces
+                    String[] words = line.split("[\\s\\.\\\'\\\",!?;:\\-()\\[\\]]+"); // Séparation des mots s'il y a 1+ espaces
                     
                     Map<String, Integer> wordCount = new HashMap<>();
                     for (String word : words) {

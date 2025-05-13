@@ -87,6 +87,7 @@ public class Server {
                             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                             String fileName = outputDir + "mapping/" + "mapper_" + idMapper + "_reducer_" + idReducer + ".txt";
                             ArrayList<String> lines = (ArrayList<String>) FileManager.readFile(fileName);
+                            out.writeObject(clientAddress);
                             out.writeInt(nbMappers);
                             out.writeInt(idReducer);
                             out.writeObject(lines); // Envoi de la liste de lignes au reducer
@@ -100,9 +101,10 @@ public class Server {
                 } catch (ClassNotFoundException e) {
                     System.err.println("Erreur lors de la désérialisation de l'objet : " + e.getMessage());
                 } finally {
+                    // Opération terminée
                     clientSocket.close();
+                    System.out.println("Mapping terminé !\n");
                 }
-
             }   
         } catch (IOException e) {
             System.err.println("Erreur lors de l'exécution du serveur Mapper : " + e.getMessage());
@@ -114,6 +116,7 @@ public class Server {
             System.out.println("Reducer en attente de connexion sur le port " + port + "...");
             int nbMappers = 9999999;
             int idReducer = -1;
+            InetAddress clientAddress = null;
             while (true) {       
                 // Réception des lignes à traiter à partir de plusieurs mappers
                 ArrayList<String> allLines = new ArrayList<>();
@@ -125,6 +128,7 @@ public class Server {
                     int mapperPort = mapperSocket.getPort();
                     System.out.println("Connexion acceptée de " + mapperAddress + ":" + mapperPort);
                     try (ObjectInputStream in = new ObjectInputStream(mapperSocket.getInputStream())) {
+                        clientAddress = (InetAddress) in.readObject();
                         nbMappers = in.readInt();
                         idReducer = in.readInt();
                         ArrayList<String> lines = (ArrayList<String>) in.readObject(); // Portion à mapper
@@ -143,15 +147,30 @@ public class Server {
                 }
                 System.out.println("Réduction de " + allLines.size() + " lignes.");
 
+                // Opération du reducing
                 Reducer reducer = new Reducer(idReducer, outputDir);
                 try {
                     reducer.reduce(allLines);
                 } catch (IOException e) {
                     System.err.println("Erreur lors de l'exécution du reducer : " + e.getMessage());
                 }
-                
-                
 
+                // Envoi du résultat au client (tous les mots)
+                try (Socket clientSocket = new Socket(clientAddress, clientPort)) {
+                    ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+                    String fileName = outputDir + "reducing/" + "reducer_" + idReducer + ".txt";
+                    ArrayList<String> lines = (ArrayList<String>) FileManager.readFile(fileName);
+                    out.writeObject(lines);
+                    out.flush();
+                    System.out.println("Envoi des résultats du reducer " + idReducer + " au client (" + lines.size() + " lignes)");
+                    clientSocket.close();
+                } catch (IOException e) {
+                    System.err.println("Erreur lors de l'ouverture du socket : " + e.getMessage());
+                    return;
+                } finally {
+                    // Opération terminée
+                    System.out.println("Réduction terminée !\n");
+                }
             }
         } catch (IOException e) {
             System.err.println("Erreur lors de l'exécution du serveur Reducer : " + e.getMessage());

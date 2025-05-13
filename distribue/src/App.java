@@ -36,8 +36,20 @@ public class App {
                 reducers.put(1, new InetSocketAddress("localhost", 5021));
                 // reducers.put(2, new InetSocketAddress("localhost", 5022));
 
-                Client client = new Client(5001, mappers, reducers, "./data/qqch.txt");
-                
+
+                // Vérification de la présence du fichier d'entrée
+                String inputFile = "./data/" + args[1] + ".txt";
+                if (args.length < 2) {
+                    System.out.println("Le nom du fichier d'entrée est manquant.");
+                    return;
+                }
+                if (args[1] == null || FileManager.exists(inputFile) == false) {
+                    System.out.println("Le fichier " + inputFile + " est manquant ou n'existe pas.");
+                    return;
+                }
+                System.out.println("Fichier d'entrée : " + inputFile);
+                Client client = new Client(5001, mappers, reducers, inputFile);
+
                 try {
                     client.launch();
                 } catch (Exception e) {

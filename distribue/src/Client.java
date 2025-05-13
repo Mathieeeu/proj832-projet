@@ -60,7 +60,7 @@ public class Client {
         // On attend la réponse de tous les mappers (elles contiendront juste la répartition des mots par couple mapper/reducer)
         // Format de la réponse : "m0r0s12_m0r1s14_m1r0s11_m1r1s20_" avec deux mappers (0 et 1) et deux reducers et des fichiers de tailles 12, 14, 11 et 20.
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Client en attente de réponses sur le port " + port + "...");
+            System.out.println("Client en attente de réponses des mappers sur le port " + port + "...");
             int responsesRecieved = 0;
             String mapperResponses = "";
             while (responsesRecieved < nbMappers) {
@@ -77,13 +77,15 @@ public class Client {
                 responsesRecieved++;
             }
             System.out.println("Réponses des mappers : " + mapperResponses);
+
             // TODO : à faire en option (c'est ici qu'on pourrait modifier les ids des reducers pour qu'ils soit optis)
+            
         } catch (IOException e) {
             System.err.println("Erreur lors de la réception des résultats du mapping : " + e.getMessage());
             return;
         }
 
-        // TODO : On donne les adresses des reducers aux mappers (pour qu'ils sachent où envoyer les résultats)
+        // On donne les adresses des reducers aux mappers (pour qu'ils sachent où envoyer les résultats)
         for (int i = 0; i < nbMappers; i++) {
             InetSocketAddress mapperAddress = mappers.get(i);
             try (Socket socket = new Socket(mapperAddress.getAddress(), mapperAddress.getPort())) {
@@ -96,8 +98,50 @@ public class Client {
             }
         }
 
-        // TODO : On attend la réponse de tous les reducers (elle contiendra leur compte final de mots) puis faire la fusion :)
-        
-        
+        // On attend la réponse de tous les reducers (elle contiendra leur compte final de mots)
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Client en attente de réponses des reducers sur le port " + port + "...");
+            ArrayList<String> allLines = new ArrayList<>();
+            int responsesRecieved = 0;
+            while (responsesRecieved < nbReducers) {
+                // Attendre une connexion d'un reducer
+                Socket reducerSocket = serverSocket.accept();
+                InetAddress reducerAddress = reducerSocket.getInetAddress();
+                int reducerPort = reducerSocket.getPort();
+                System.out.println("Connexion acceptée de " + reducerAddress + ":" + reducerPort);
+                try (ObjectInputStream in = new ObjectInputStream(reducerSocket.getInputStream())) {
+                    ArrayList<String> result = (ArrayList<String>) in.readObject();
+                    allLines.addAll(result);
+                    // System.out.println("Client a reçu " + result.size() + " lignes.");
+                    responsesRecieved++;
+                    reducerSocket.close();
+                } catch (ClassNotFoundException e) {
+                    System.err.println("Erreur lors de la désérialisation de l'objet : " + e.getMessage());
+                    return;
+                }
+            }
+            System.out.println("Réponses des reducers reçues.");
+            System.out.println("Total de lignes reçues : " + allLines.size());
+
+            // Trier les lignes par ordre décroissant
+            allLines.sort((line1, line2) -> {
+                int count1 = Integer.parseInt(line1.split("\\s+")[1].trim());
+                int count2 = Integer.parseInt(line2.split("\\s+")[1].trim());
+                return Integer.compare(count2, count1); // Tri décroissant
+            });
+
+            // On fusionne les résultats des reducers et on les écrit dans le fichier de sortie
+            try (FileWriter writer = new FileWriter(finalOutputFileName)) {
+                for (String line : allLines) {
+                    writer.write(line + "\n");
+                }
+            } catch (IOException e) {
+                System.err.println("Erreur lors de l'écriture du fichier de sortie : " + e.getMessage());
+            }
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("Durée totale : " + (endTime - startTime) + " ms");
+        System.out.println("Fichier de sortie : " + finalOutputFileName);
+        System.out.println("Fin du client.\n");
     }
 }

@@ -23,6 +23,11 @@ public class FileManager {
         return lines;
     }
 
+    public static boolean exists(String filePath) {
+        java.io.File file = new java.io.File(filePath);
+        return file.exists();
+    }
+
     public static String getFileName(String filePath) {
         return filePath.substring(filePath.lastIndexOf("/") + 1, filePath.lastIndexOf("."));
     }

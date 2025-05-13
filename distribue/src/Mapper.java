@@ -21,9 +21,10 @@ public class Mapper{
             try (FileWriter writer = new FileWriter(outputFileName)) {
                 Map<String, Integer> wordCount = new HashMap<>();
                 for (String line : input) {
-                    String[] words = line.split("\\s+");
+                    String[] words = line.split("[\\s\\.\\\'\\\",!?;:\\-()\\[\\]]+");
                     
                     for (String word : words) {
+                        word = word.toLowerCase();
                         if (isItMyJob(word, nbReducers, i)) {
                             wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
                         }

@@ -18,7 +18,6 @@ public class WordCountReducer implements Reducer {
         
         for (int i = 0; i < nbMappers ; i++) {
             // Pour chaque fichier
-            
             String inputFileName = outputDir + "mapper_" + i + "_reducer_" + idReducer + ".txt";
             
             // On lit le fichier et on compte les mots

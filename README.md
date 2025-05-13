@@ -26,3 +26,10 @@ Il s’agit ici de reproduire le comportement d’Hadoop sur l’exemple de comp
     ∗ ces étapes peuvent être sautées et remplacées par les données qui passent juste de mapper à utilisateur puis à reducer sans chercher à optimiser les échanges.
   
     ∗∗ on peut tester différentes fonctions de séparation du travail pour les reducers (par position de lettres, par modulo du code de la premiere lettre, par modulo du hashage du mot, par modulo de la taille du mot...) -> en théorie le plus opti c'est le modulo du hashage (car quasi-équilibré) mais il peut prendre beaucoup plus longtemps qu'un truc plus simple donc faut en test plusieurs
+
+## Projet
+
+Nous avons réalisé les deux approches possibles, le README.md de chaque partie est dans le dossier correspondant, avec le code.
+
+- Multithread en java (`./multithread`)
+- Avec plusieurs processus en java (ou python, ou c) avec des communications par sockets ou RMI ou systèmes de fichiers (`./distrubue`)
