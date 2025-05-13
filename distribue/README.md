@@ -7,7 +7,7 @@
 - Des serveurs qui font le mapping ou le reducing (il peut y avoir deux serveurs qui tournent en même temps sur une machine (avec des ports différents), voire plus avec des ports encore différents)
 - Quand on lance un serveur, il affiche son adresse IP et son port
 - Dans le code du client, il faut hardcoder l'adresse IP et le port des serveurs
-- Le client prend un fichier texte, le coupe en m morceaux (m = nombre de serveurs mappers) à l'aide d'un modulo
+- Le client prend un fichier texte, le coupe en m morceaux (m = nombre de serveurs mappers)
 - Ils font le mapping et calculent les % de chaque reducer dans la répartition des mots comptés par le mapping
 - Optionnel : Le client calcule les transferts optimaux entre les mappers et les reducers (car certains reducers sont sur les mêmes machines que les mappers) (**pas encore fait**)
 - Chaque mapper envoie ses résultats à tous les reducers directement (en prenant les ids des reducers calculés par le client)

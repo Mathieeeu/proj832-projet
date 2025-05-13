@@ -79,7 +79,7 @@ public class Server {
                         return;
                     }
 
-                    // TODO : Envoyer les comptes aux reducers
+                    // Envoyer les comptes aux reducers
                     for (int idReducer = 0; idReducer < nbReducers; idReducer++) {
                         InetSocketAddress reducerAddress = reducerAddresses.get(idReducer);
                         System.out.println("Envoi des résultats de mapping au reducer " + idReducer + " : " + reducerAddress.getAddress() + ":" + reducerAddress.getPort());
@@ -131,7 +131,7 @@ public class Server {
                         clientAddress = (InetAddress) in.readObject();
                         nbMappers = in.readInt();
                         idReducer = in.readInt();
-                        ArrayList<String> lines = (ArrayList<String>) in.readObject(); // Portion à mapper
+                        ArrayList<String> lines = (ArrayList<String>) in.readObject(); // Portion à réduire
                         allLines.addAll(lines);
                         // System.out.println("Reducer a reçu " + lines.size() + " lignes à réduire.");
                         responsesRecieved++;
